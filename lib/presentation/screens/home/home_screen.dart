@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:log_aplication/presentation/provider/LogIn_provider.dart';
 import 'package:log_aplication/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,7 +40,7 @@ class _LogInState extends State<_LogIn> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el AlertDialog
+                Navigator.of(context).pop(); 
               },
               child: const Text('OK'),
             ),
@@ -70,7 +71,7 @@ class _LogInState extends State<_LogIn> {
         children: [
           SizedBox(
             width: 0.33 * MediaQuery.of(context).size.width,
-            height: 0.1 * MediaQuery.of(context).size.height,
+            height: 60,
             child: _LogInUsername(controller: _usernameController),
           ),
           SizedBox(
@@ -128,6 +129,10 @@ class _LogInPassword extends StatelessWidget {
         ),
         filled: true,
       ),
+
+      onFieldSubmitted: (value){
+        LogInProvider.getLogInParams(value);
+      },
     );
   }
 }
