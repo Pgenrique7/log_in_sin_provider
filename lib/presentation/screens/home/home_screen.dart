@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:log_aplication/presentation/provider/LogIn_provider.dart';
 import 'package:log_aplication/presentation/screens/screens.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class _LogInState extends State<_LogIn> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),
@@ -54,34 +55,48 @@ class _LogInState extends State<_LogIn> {
     final username = _usernameController.text;
     final password = _passwordController.text;
 
+    final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
+
     if (username.isEmpty || password.isEmpty) {
       _showErrorDialog(context, 'Por favor, ingrese un nombre de usuario y contraseña.');
-    } else if (username != password) {
-      _showErrorDialog(context, 'Nombre de usuario o contraseña incorrectos.');
     } else {
-      context.goNamed(WelcomeScreen.name );
+      final isValidUser = usuarioProvider.verificarCredenciales(username, password);
+
+      if (isValidUser) {
+        context.goNamed(WelcomeScreen.name); 
+      } else {
+        _showErrorDialog(context, 'Nombre de usuario o contraseña incorrectos.');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 0.33 * MediaQuery.of(context).size.width,
-            height: 60,
-            child: _LogInUsername(controller: _usernameController),
+    return Consumer<UsuarioProvider>(
+      builder: (context, usuarioProvider, child) {
+        if (usuarioProvider.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 0.33 * MediaQuery.of(context).size.width,
+                height: 60,
+                child: _LogInUsername(controller: _usernameController),
+              ),
+              SizedBox(
+                width: 0.33 * MediaQuery.of(context).size.width,
+                child: _LogInPassword(controller: _passwordController),
+              ),
+              const SizedBox(height: 20),
+              ValidationButton(onValidate: () => _validateAndNavigate(context)),
+            ],
           ),
-          SizedBox(
-            width: 0.33 * MediaQuery.of(context).size.width,
-            child: _LogInPassword(controller: _passwordController),
-          ),
-          const SizedBox(height: 20),
-          ValidationButton(onValidate: () => _validateAndNavigate(context)),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -120,7 +135,7 @@ class _LogInPassword extends StatelessWidget {
 
     return TextFormField(
       controller: controller,
-      obscureText: true, 
+      obscureText: true,
       decoration: InputDecoration(
         hintText: 'Password',
         enabledBorder: OutlineInputBorder(
@@ -129,10 +144,6 @@ class _LogInPassword extends StatelessWidget {
         ),
         filled: true,
       ),
-
-      onFieldSubmitted: (value){
-        LogInProvider.getLogInParams(value);
-      },
     );
   }
 }

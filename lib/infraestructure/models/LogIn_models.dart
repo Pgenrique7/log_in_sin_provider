@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-class LogIn {
+class Usuario {
     final String id;
     final String nombre;
     final String clave;
 
-    LogIn({
+    Usuario({
         required this.id,
         required this.nombre,
         required this.clave,
     });
 
-    factory LogIn.fromRawJson(String str) => LogIn.fromJson(json.decode(str));
+    factory Usuario.fromRawJson(String str) => Usuario.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory LogIn.fromJson(Map<String, dynamic> json) => LogIn(
+    factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         id: json["id"],
         nombre: json["nombre"],
         clave: json["clave"],
