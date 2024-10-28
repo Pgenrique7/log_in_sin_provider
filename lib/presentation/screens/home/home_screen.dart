@@ -114,7 +114,7 @@ class _LogInUsername extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: 'Username/Email',
-        enabledBorder: OutlineInputBorder(
+        border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: colors.primary),
         ),
@@ -138,7 +138,7 @@ class _LogInPassword extends StatelessWidget {
       obscureText: true,
       decoration: InputDecoration(
         hintText: 'Password',
-        enabledBorder: OutlineInputBorder(
+        border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: colors.primary),
         ),
