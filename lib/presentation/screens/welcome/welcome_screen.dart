@@ -11,6 +11,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text("Bienvenido")),
+        backgroundColor:Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
